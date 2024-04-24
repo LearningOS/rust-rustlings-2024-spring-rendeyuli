@@ -40,30 +40,77 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of
 // Person Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
+
+fn count_commas(vec: &Vec<&str>) -> usize {
+    vec.iter().fold(0, |count, str| {
+        count + str.matches(',').count()
+    })
+}
 
 impl From<&str> for Person {
-    fn from(s: &str) -> Person {
-        let s=s.to_string();
-        let s:Vec<&str>=s.split(',').collect();
-        for val in s{
-            if s[0].is_empty(){
-                Person::default;
-            }else{
-                if s[2].is_empty(){
-                    s[1].parse::<usize>();
-                    return Person{
-                        name:s[0].to_string(),
-                        age:s[1]
-                    };
-                }else{
-                   Person::default;
-                }
-            }
+    // fn from(s: &str) -> Person {
+    //     let s=s.to_string();
+        
+    //     // for val in s{
+    //     //     if s[0].is_empty(){
+    //     //         Person::default;
+    //     //     }else{
+    //     //         if s[2].is_empty(){
+    //     //             s[1].parse::<usize>();
+    //     //             return Person{
+    //     //                 name:s[0].to_string(),
+    //     //                 age:s[1]
+    //     //             };
+    //     //         }else{
+    //     //            Person::default;
+    //     //         }
+    //     //     }
 
-        }
+    //     // }
+
+
+    //     let mut s: Vec<&str> = s.split_inclusive(',').collect();
+    //     let mut num=count_commas(&s);
+    //     if num>=2 {return Person::default();}
+    //     s = s.iter().map(|part| &part[0..part.len()-1]).collect();
+    //     if s.len()>=3{return Person::default();}
+    //     match s[..] {
+    //         [name, age,..] if !name.is_empty() => {
+    //             if let Ok(age) = age.parse::<usize>() {
+    //                 println!("Parsing age: {}", age);
+
+    //                 Person {
+    //                     name: name.into(),
+    //                     age: age,
+    //                 }
+    //             } else {
+    //                 Person::default()
+    //             }
+    //         }
+    //         _ => {
+    //             Person::default()
+    //         }
+    //     }
     
+    // }
+    fn from(s: &str) -> Person {
+        let (name, age) = match s.split_once(',') {
+            Some((name, age)) => (name.trim(), age.trim()),
+            _ => return Person::default(),
+        };
+
+        if let Ok(age) = age.parse::<usize>() {
+            if name.len() > 0 {
+                return Person {
+                    name: String::from(name),
+                    age,
+                };
+            }
+        }
+
+        Person::default()
     }
+
 }
 
 fn main() {
@@ -74,6 +121,8 @@ fn main() {
     println!("{:?}", p1);
     println!("{:?}", p2);
 }
+
+
 
 #[cfg(test)]
 mod tests {
@@ -92,6 +141,7 @@ mod tests {
         assert_eq!(p.name, "John");
         assert_eq!(p.age, 30);
     }
+
     #[test]
     fn test_good_convert() {
         // Test that "Mark,20" works
