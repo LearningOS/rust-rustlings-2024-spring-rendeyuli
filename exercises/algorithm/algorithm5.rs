@@ -30,7 +30,9 @@ impl Graph {
         
 		//TODO
 
-        let mut visit_order = vec![];
+        let mut visit_order =Vec::new;
+        
+        
         visit_order
     }
 }
@@ -50,7 +52,6 @@ mod tests {
         graph.add_edge(1, 4);
         graph.add_edge(2, 3);
         graph.add_edge(3, 4);
-
         let visited_order = graph.bfs_with_return(0);
         assert_eq!(visited_order, vec![0, 1, 4, 2, 3]);
     }
